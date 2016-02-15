@@ -34,16 +34,26 @@ This project follows ribot's Android architecture guidelines that are based on [
 
 ### How to implement a new screen following MVP
 
-Imagine you have to implement a sign in screen. 
+想象你得实现一个登录界面
 
-1. Create a new package under `ui` called `signin`
-2. Create an new Activity called `ActivitySignIn`. You could also use a Fragment.
-3. Define the view interface that your Activity is going to implement. Create a new interface called `SignInMvpView` that extends `MvpView`. Add the methods that you think will be necessary, e.g. `showSignInSuccessful()`
-4. Create a `SignInPresenter` class that extends `BasePresenter<SignInMvpView>`
-5. Implement the methods in `SignInPresenter` that your Activity requires to perform the necessary actions, e.g. `signIn(String email)`. Once the sign in action finishes you should call `getMvpView().showSignInSuccessful()`.
-6. Create a `SignInPresenterTest`and write unit tests for `signIn(email)`. Remember to mock the  `SignInMvpView` and also the `DataManager`.
-7. Make your  `ActivitySignIn` implement `SignInMvpView` and implement the required methods like `showSignInSuccessful()`
-8. In your activity, inject a new instance of `SignInPresenter` and call `presenter.attachView(this)` from `onCreate` and `presenter.detachView()` from `onDestroy()`. Also, set up a click listener in your button that calls `presenter.signIn(email)`.
+1. 在 `ui` 下创建一个包名叫 `signin`
+2. 创建一个Activity `ActivitySignIn`. 也可以用Fragment代替.
+3. 定义上面这个Activity需要实现的一个接口`SignInMvpView`，它扩展自`MvpView`.为接口添加所有必要的方法如 `showSignInSuccessful()`
+4. 创建类 `SignInPresenter` 扩展自 `BasePresenter<SignInMvpView>`
+5. 在类 `SignInPresenter`实现方法，这些方法最终会被Acitivity调用来实现一些行为如`signIn(String email)`，在signIn方法体里成功完成sigin后应该调用 `getMvpView().showSignInSuccessful()`.
+6. 创建一个测试类 `SignInPresenterTest`并且为`signIn(email)`写单元测试. 这时需要创建mock的  `SignInMvpView`和 `DataManager`.
+8. 在ActivitySignIn里注入 `SignInPresenter`实例，并且在 `onCreate`函数里`presenter.attachView(this)`  和在 `onDestroy()`里调用`presenter.attachView(this)`. 此外, 需要为某个登录button设置一个clickListener来调用 `presenter.signIn(email)`.
+
+###Benifit of using Dagger2
+
+1. Singleton
+2. Order of objects instantiation
+3. Passing constructor arguments that not required for the object
+4. Unit tests: With Dagger it is very easy to inject one object instead of another for the sake of unit-testing
+5. Integration tests: You can easily substiture any part of your application
+6. Scopes: With dagger injections can be bound to a specific part of an application..In example ,you can inject activity-related objects such as DrawController and ActionBarController and when activity dies,you can automatically release references to objects inside Dagger that have been associated with this activity
+7. Objects decoupling
+8. Declarative programming style
 
 ## Code Quality
 
